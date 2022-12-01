@@ -38,5 +38,5 @@
 
 ## Todos
 
-- [ ] Dockerize service
+- [x] Dockerize service
 - [ ] Intl
