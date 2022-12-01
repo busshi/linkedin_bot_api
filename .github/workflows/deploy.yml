@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: busshi/linkedin_bot:latest
+          tags: busshi/linkedin_bot_api:latest
           platforms: |-
             linux/arm64
             linux/amd64
