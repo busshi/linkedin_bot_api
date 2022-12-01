@@ -1,0 +1,30 @@
+{
+  "name": "linkedin_bot_api",
+  "version": "1.0.0",
+  "description": "A Linkedin bot to accept incoming connexions requests and auto reply to unread messages",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "nodemon index.ts",
+    "prod": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/busshi/linkedin_bot_api.git"
+  },
+  "author": "busshi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/busshi/linkedin_bot_api/issues"
+  },
+  "homepage": "https://github.com/busshi/linkedin_bot_api#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "linkedin-private-api": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.10",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
+  }
+}
