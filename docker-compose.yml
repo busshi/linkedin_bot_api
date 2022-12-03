@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 services:
   linkedin-bot-api:
@@ -11,6 +11,6 @@ services:
     env_file:
       - ./app/.env
 
-    entrypoint: npm run prod
+    entrypoint: yarn run prod
 
     restart: on-failure:5
