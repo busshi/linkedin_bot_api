@@ -11,6 +11,6 @@ services:
     env_file:
       - ./app/.env
 
-    entrypoint: node dist/index.js
+    entrypoint: bash -c 'tsc && node dist/index.js'
 
     restart: on-failure:5

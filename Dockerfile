@@ -8,8 +8,8 @@ COPY        ./app .
 
 RUN			chown -R linkedin:linkedin /opt/bot
 
-RUN         npm install -D nodemon
+RUN         yarn add -D nodemon
 
-RUN         npm install --location=global typescript && tsc
+RUN         yarn add typescript
 
 USER        linkedin
