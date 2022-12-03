@@ -1,0 +1,3 @@
+[submodule "app/linkedin-private-api"]
+	path = app/linkedin-private-api
+	url = https://github.com/busshi/linkedin-private-api
