@@ -27,8 +27,7 @@
 
 ## Docker usage
 
-- Development mode `docker-compose -f compose.dev.yml up -d`
-- Development mode `docker-compose -f compose.prod.yml up -d`
+- Production usage `docker-compose up -d`
 
 ## Notes
 
