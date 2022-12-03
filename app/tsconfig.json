@@ -100,7 +100,7 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": "src/"
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "linkedin-private-api"]
 }

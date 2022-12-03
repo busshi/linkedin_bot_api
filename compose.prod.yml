@@ -2,8 +2,8 @@ version: "3"
 
 services:
   linkedin-bot-api:
+    #build: .
     image: busshi/linkedin_bot_api:latest
-
     pull_policy: always
 
     container_name: linkedin_bot_api
@@ -11,6 +11,6 @@ services:
     env_file:
       - ./app/.env
 
-    entrypoint: bash -c 'tsc && node dist/index.js'
+    entrypoint: npm run prod
 
     restart: on-failure:5
