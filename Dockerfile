@@ -1,10 +1,15 @@
 FROM        node:17
 
-WORKDIR     /opt/app/bot
+RUN			useradd -m -s /bin/bash linkedin
+
+WORKDIR     /opt/bot
 
 COPY        ./app .
 
-RUN         npm install -D nodemon
+RUN			chown -R linkedin:linkedin /opt/bot
 
-RUN         npm install --location=global typescript && tsc
+RUN         yarn add -D nodemon
 
+RUN         yarn add typescript
+
+USER        linkedin
