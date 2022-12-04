@@ -13,4 +13,4 @@ services:
 
     entrypoint: yarn run prod
 
-    restart: on-failure:2
+    restart: on-failure:1

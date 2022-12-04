@@ -139,12 +139,12 @@ const getConversation = async (client: Client, conversationId: string) => {
     const profilePicture = pictureUrls[0];
     console.log(profilePicture, firstName, lastName, profileId, text);
 
-    const conversationAsRead = await client.conversation.markConversationAsRead(
-      {
-        conversationId,
-      }
-    );
-    console.log("-> OK", conversationAsRead.read);
+    // const conversationAsRead = await client.conversation.markConversationAsRead(
+    //   {
+    //     conversationId,
+    //   }
+    // );
+    // console.log("-> OK", conversationAsRead.read);
     // const myConnectionsScroller = client.search.searchOwnConnections({
     //   keywords: "Alice DUBAR",
     // });
