@@ -1,29 +1,17 @@
 import dotenv from "dotenv";
+import {
+  shortInterval,
+  longInterval,
+  welcomeMessage,
+  colors,
+} from "./constants";
 
 dotenv.config();
 
 import { Client } from "linkedin-private-api";
 
-const GITHUB_URL = process.env.GITHUB_URL;
-const CV_URL = process.env.CV_URL;
-const USERNAME = process.env.USERNAME ?? "";
-const PASSWORD = process.env.PASSWORD;
-
-// const wait = (seconds: number) =>
-//   new Promise((res) => setTimeout(res, seconds * 1000));
-
-// const buildMessage = (profile: { firstName: string }) => `
-// Hey ${profile.firstName},
-
-// Thank you for connecting!
-// Hello. I'm a software engineer and I'm looking for my next challenge :)
-
-// I'm sending this message using a LinkedIn bot I've created in NodeJS that wraps the LinkedIn private API.
-// You can have a look at the source code here: ${GITHUB_URL}.
-// You can also view my CV here: ${CV_URL}
-
-// Thanks,
-// `;
+const { GITHUB_URL, CV_URL, USERNAME, PASSWORD } = process.env;
+let INTERVAL = longInterval; // seconds
 
 // const getConnections = async (client: {
 //   search: { searchOwnConnections: (arg0: { filters: {} }) => any };
@@ -117,12 +105,55 @@ const PASSWORD = process.env.PASSWORD;
 //   console.log("Finished processing all connections!");
 // };
 
-const checkReceivedInvitations = async (client: {
-  invitation: { getReceivedInvitations: () => any };
-}) => {
+const checkReceivedInvitations = async (client: Client) => {
+  console.log(
+    `${colors.orange}[+] Checking new connexions requests...${colors.clear}`
+  );
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
-  console.log("INVIT", receivedInvitations);
+
+  for (const invit of receivedInvitations) {
+    const { entityUrn, profile, sharedSecret } = invit;
+    const { firstName, lastName, pictureUrls, profileId } = profile;
+    const invitationId = entityUrn.split(":")[3];
+    const fromUser = `${firstName} ${lastName}`;
+    if (pictureUrls && pictureUrls.length) {
+      const fromUserPic = pictureUrls[0];
+    }
+    //TODO
+    // Telegram notif
+    const message = `✋ New connection request from ${fromUser}`;
+    // sendMessage
+    // sendPhoto
+    // try {
+    //   await client.invitation.replyInvitation({
+    //     invitationId,
+    //     invitationSharedSecret: sharedSecret,
+    //   });
+    console.log(
+      `${colors.orange}[+] Sending welcome message to ${firstName} ${lastName}${colors.clear}`
+    );
+    //   await client.message.sendMessage({
+    //     profileId,
+    //     text: "👋",
+    //   });
+
+    //   wait(2);
+
+    //   await client.message.sendMessage({
+    //     profileId,
+    //     text: welcomeMessage(firstName),
+    //   });
+    //    INTERVAL = shortInterval
+    //
+    // . TO DO
+    //  Notification Telegram
+    // const msg = `📤 Welcome message sent to [${firstName lastName}]`
+    // } catch {
+    //   console.error("Error while accepting connection request");
+    // }
+    console.log("👥 Network checked");
+  }
 };
 
 const getConversation = async (client: Client, conversationId: string) => {
@@ -130,14 +161,23 @@ const getConversation = async (client: Client, conversationId: string) => {
   const messages = await messagesScroller.scrollNext();
   if (messages.length) {
     //console.log("MESSAGES", messages);
-    const lastMessage = messages[messages.length - 1];
+    const lastMessage = messages[0];
     const { text } = lastMessage.eventContent.attributedBody;
-    //    console.log("LAST MESSAGE", lastMessage);
+    console.log("LAST MESSAGE", lastMessage);
 
     const { sentFrom } = lastMessage;
     const { pictureUrls, firstName, lastName, profileId } = sentFrom;
     const profilePicture = pictureUrls[0];
+
+    //TO DO
+    // Telegram notification
     console.log(profilePicture, firstName, lastName, profileId, text);
+    const message = `📥 New unread message from ${firstName} ${lastName}
+    ${text}
+    `;
+    console.log(message);
+    //sendMessage
+    //sendPhoto
 
     // const conversationAsRead = await client.conversation.markConversationAsRead(
     //   {
@@ -145,6 +185,11 @@ const getConversation = async (client: Client, conversationId: string) => {
     //   }
     // );
     // console.log("-> OK", conversationAsRead.read);
+
+    //TODO
+    //check action
+    // action reply
+
     // const myConnectionsScroller = client.search.searchOwnConnections({
     //   keywords: "Alice DUBAR",
     // });
@@ -160,9 +205,9 @@ const getConversation = async (client: Client, conversationId: string) => {
 };
 
 const checkUnreadMessages = async (client: Client) => {
+  console.log(`${colors.orange}[+] Checking unread messages...${colors.clear}`);
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();
-  console.log(conversations.length);
   for (const conv of conversations) {
     if (conv.unreadCount > 0 && conv.conversationId) {
       //      const { firstName, lastName, occupation } = conv.participants[0];
@@ -171,35 +216,20 @@ const checkUnreadMessages = async (client: Client) => {
       getConversation(client, conv.conversationId);
     }
   }
+  console.log("📨 Messages checked");
 };
 
 (async () => {
+  console.log("✅ Starting bot...");
   const client = new Client();
-  await client.login.userPass({ username: USERNAME, password: PASSWORD });
+  await client.login.userPass({ username: USERNAME || "", password: PASSWORD });
 
-  // const [
-  //   [{ company: google }],
-  //   [{ company: microsoft }],
-  //   [{ company: facebook }],
-  //   [{ company: linkedin }],
-  // ] = await Promise.all([
-  //   client.search.searchCompanies({ keywords: "Google" }).scrollNext(),
-  //   client.search.searchCompanies({ keywords: "Microsoft" }).scrollNext(),
-  //   client.search.searchCompanies({ keywords: "Facebook" }).scrollNext(),
-  //   client.search.searchCompanies({ keywords: "LinkedIn" }).scrollNext(),
-  // ]);
-
-  // const companyIds = [
-  //   google.companyId,
-  //   microsoft.companyId,
-  //   facebook.companyId,
-  //   linkedin.companyId,
-  // ];
-
-  //  sendInvitations(client, companyIds);
-  //setInterval(() => {
-  //  getConnections(client);
-  //}, 14400000);
-  checkReceivedInvitations(client);
-  checkUnreadMessages(client);
+  let i = 0;
+  setInterval(() => {
+    //   !i && checkReceivedInvitations(client);
+    checkUnreadMessages(client);
+    i += 1;
+    if (i % 10 === 0) INTERVAL = longInterval;
+    if (i === 60) i = 0;
+  }, INTERVAL * 1000);
 })();
