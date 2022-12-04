@@ -10,6 +10,8 @@ RUN			chown -R linkedin:linkedin /opt/bot
 
 WORKDIR     /opt/bot/app
 
+COPY        --chown=linkedin:linkedin entrypoint.sh .
+
 RUN         yarn add -D nodemon
 
 RUN         yarn add typescript
