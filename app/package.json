@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/busshi/linkedin_bot_api#readme",
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "axios": "^1.2.0",
     "linkedin-private-api": "file:./linkedin-private-api"
   },
   "devDependencies": {

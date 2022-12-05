@@ -1,107 +1,15 @@
-import dotenv from "dotenv";
 import { shortInterval, longInterval, welcomeMessage } from "./constants";
 
-dotenv.config();
-
 import { Client } from "linkedin-private-api";
-import { wait } from "./utils";
+import { checkAction, formatActionMessage, wait } from "./utils";
+import { Telegram } from "./Telegram";
 
-const { GITHUB_URL, CV_URL, USERNAME, PASSWORD } = process.env;
-let INTERVAL = longInterval; // seconds
+const { LINKEDIN_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_ID, USERNAME, PASSWORD } =
+  process.env;
 
-// const getConnections = async (client: {
-//   search: { searchOwnConnections: (arg0: { filters: {} }) => any };
-// }) => {
-//   const connectionsScroller = client.search.searchOwnConnections({
-//     filters: {},
-//   });
+let INTERVAL = longInterval;
 
-//   let connections;
-//   while (
-//     (connections = await connectionsScroller.scrollNext()) &&
-//     connections.length
-//   ) {
-//     for (const connection of connections) {
-//       const { profile } = connection;
-//       //console.log("PROFILE", profile);
-//       console.log(profile.publicIdentifier, profile.profileId);
-
-//       // const [conversation] = await client.conversation
-//       //   .getConversations({
-//       //     recipients: profile.profileId,
-//       //   })
-//       //   .scrollNext();
-
-//       // console.log("CONVERSATION =>", [conversation]);
-//       // if (!conversation) {
-
-//       // }
-//     }
-//   }
-// };
-
-// const sendMessages = async (client: {
-//   search: { searchOwnConnections: (arg0: { filters: {} }) => any };
-//   conversation: {
-//     getConversations: (arg0: { recipients: any }) => {
-//       (): any;
-//       new (): any;
-//       scrollNext: { (): [any] | PromiseLike<[any]>; new (): any };
-//     };
-//   };
-// }) => {
-//   const connectionsScroller = client.search.searchOwnConnections({
-//     filters: {
-//       //      currentCompany: companyIds,
-//       //    geoUrn: COUNTRY_CODE,
-//     },
-//   });
-
-//   let connections;
-//   let counter = 0;
-
-//   while (
-//     (connections = await connectionsScroller.scrollNext()) &&
-//     connections.length
-//   ) {
-//     for (const connection of connections) {
-//       console.log("CONNECTION", connection);
-//       const { profile } = connection;
-//       console.log("PROFILE", profile);
-
-//       const [conversation] = await client.conversation
-//         .getConversations({
-//           recipients: profile.profileId,
-//         })
-//         .scrollNext();
-
-//       console.log("CONVERSATION =>", [conversation]);
-//       if (!conversation) {
-//         const message = buildMessage(profile);
-
-//         //        console.log(message);
-//         // await client.message.sendMessage({
-//         //   profileId: profile.profileId,
-//         //   text: message,
-//         // });
-
-//         counter += 1;
-//         await wait(5);
-//       }
-//     }
-
-//     if (counter === 30) {
-//       counter = 0;
-//       await wait(1800);
-//     } else {
-//       await wait(10);
-//     }
-//   }
-
-//   console.log("Finished processing all connections!");
-// };
-
-const checkReceivedInvitations = async (client: Client) => {
+const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
   console.log("[+] Checking new connexions requests...");
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
@@ -111,21 +19,24 @@ const checkReceivedInvitations = async (client: Client) => {
     const { firstName, lastName, pictureUrls, profileId } = profile;
     const invitationId = entityUrn.split(":")[3];
     const fromUser = `${firstName} ${lastName}`;
-    //TODO
-    // Telegram notif
-    const message = `✋ New connection request from ${fromUser}`;
+    let message = `✋ New connection request from ${fromUser}`;
+
+    TELEGRAM_ID && telegram.sendMessage(TELEGRAM_ID, message);
     console.log(message);
+
     if (pictureUrls && pictureUrls.length) {
       const fromUserPic = pictureUrls[0];
       console.log(fromUserPic);
+      if (fromUserPic && TELEGRAM_ID)
+        telegram.sendPhoto(TELEGRAM_ID, fromUserPic);
     }
-    // sendMessage
-    // sendPhoto
     try {
       await client.invitation.replyInvitation({
         invitationId,
         invitationSharedSecret: sharedSecret,
       });
+      wait(2);
+
       console.log(`Sending welcome message to ${firstName} ${lastName}`);
       await client.message.sendMessage({
         profileId,
@@ -140,10 +51,9 @@ const checkReceivedInvitations = async (client: Client) => {
       });
       INTERVAL = shortInterval;
 
-      // . TO DO
-      //  Notification Telegram
-      const msg = `📤 Welcome message sent to ${firstName} ${lastName}`;
-      console.log(msg);
+      message = `📤 Welcome message sent to ${firstName} ${lastName}`;
+      console.log(message);
+      TELEGRAM_ID && telegram.sendMessage(TELEGRAM_ID, message);
     } catch {
       console.error("Error while accepting connection request");
     }
@@ -151,63 +61,68 @@ const checkReceivedInvitations = async (client: Client) => {
   }
 };
 
-const getConversation = async (client: Client, conversationId: string) => {
+const getConversation = async (
+  client: Client,
+  telegram: Telegram,
+  conversationId: string
+) => {
   const messagesScroller = client.message.getMessages({ conversationId });
   const messages = await messagesScroller.scrollNext();
   if (messages.length) {
-    //console.log("MESSAGES", messages);
     const lastMessage = messages[0];
     const { text } = lastMessage.eventContent.attributedBody;
-    console.log("LAST MESSAGE", lastMessage);
-
     const { sentFrom } = lastMessage;
     const { pictureUrls, firstName, lastName, profileId } = sentFrom;
     const profilePicture = pictureUrls[0];
 
-    //TO DO
-    // Telegram notification
-    console.log(profilePicture, firstName, lastName, profileId, text);
-    const message = `📥 New unread message from ${firstName} ${lastName} ${text}`;
+    const message = `📥 New unread message from ${firstName} ${lastName}:\n\n${text}`;
     console.log(message);
-    //sendMessage
-    //sendPhoto
+    if (TELEGRAM_ID) {
+      telegram.sendMessage(TELEGRAM_ID, message);
+      profilePicture && telegram.sendPhoto(TELEGRAM_ID, profilePicture);
+    }
 
+    wait(3);
     const conversationAsRead = await client.conversation.markConversationAsRead(
       {
         conversationId,
       }
     );
-    console.log("Conversation marked as seen: ", conversationAsRead.read);
 
-    //TODO
-    //check action
-    // action reply
-
-    // const myConnectionsScroller = client.search.searchOwnConnections({
-    //   keywords: "Alice DUBAR",
-    // });
-    // const alice = await myConnectionsScroller.scrollNext();
-    // console.log(alice[0].profile.profileId);
-    // const message = "ça marche enfin";
-    // if (`${firstName} ${lastName}` !== "Alexandre DUBAR")
-    //   await client.message.sendMessage({
-    //     profileId: alice[0].profile.profileId,
-    //     text: message,
-    //   });
+    if (conversationAsRead.read) {
+      const action = formatActionMessage(text.toLowerCase());
+      const answer = checkAction(action);
+      if (answer) {
+        TELEGRAM_ID &&
+          telegram.sendMessage(
+            TELEGRAM_ID,
+            `Command [${action}] asked by ${firstName} ${lastName}`
+          );
+        if (TELEGRAM_ID && action === "contact")
+          telegram.sendMessage(
+            TELEGRAM_ID,
+            `🚨 ${firstName} ${lastName} wants to talk to you`,
+            false
+          );
+        wait(2);
+        profileId !== LINKEDIN_ID &&
+          (await client.message.sendMessage({
+            profileId,
+            text: answer,
+          }));
+      }
+    }
   }
 };
 
-const checkUnreadMessages = async (client: Client) => {
+const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
   console.log("[+] Checking unread messages...");
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();
   for (const conv of conversations) {
-    if (conv.unreadCount > 0 && conv.conversationId) {
-      //      const { firstName, lastName, occupation } = conv.participants[0];
-      //    const username = `${firstName} ${lastName}`;
-      //  console.log(`new unread message from ${username} (${occupation})`);
-      getConversation(client, conv.conversationId);
-    }
+    if (conv.unreadCount > 0 && conv.conversationId)
+      getConversation(client, telegram, conv.conversationId);
+    wait(10);
   }
   console.log("📨 Messages checked");
 };
@@ -217,10 +132,13 @@ const checkUnreadMessages = async (client: Client) => {
   const client = new Client();
   await client.login.userPass({ username: USERNAME || "", password: PASSWORD });
 
+  const telegram = new Telegram(TELEGRAM_BOT_TOKEN || "");
+  if (TELEGRAM_ID) telegram.sendMessage(TELEGRAM_ID, "✅ Starting bot...");
+
   let i = 0;
   setInterval(() => {
-    //  !i && checkReceivedInvitations(client);
-    checkUnreadMessages(client);
+    !i && checkReceivedInvitations(client, telegram);
+    checkUnreadMessages(client, telegram);
     i += 1;
     if (i % 10 === 0) INTERVAL = longInterval;
     if (i === 60) i = 0;

@@ -11,6 +11,6 @@ services:
     env_file:
       - ./app/.env
 
-    entrypoint: yarn run dev
+    entrypoint: yarn run prod
 
     restart: on-failure:1
