@@ -2,14 +2,18 @@ import { shortInterval, longInterval, welcomeMessage } from "./constants";
 
 import { Client } from "linkedin-private-api";
 import { checkAction, formatActionMessage, wait } from "./utils";
-import { Telegram } from "./Telegram";
+
+const Telegram = require("@busshi/telegram-api");
 
 const { LINKEDIN_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_ID, USERNAME, PASSWORD } =
   process.env;
 
 let INTERVAL = longInterval;
 
-const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
+const checkReceivedInvitations = async (
+  client: Client,
+  telegram: typeof Telegram
+) => {
   console.log(`[${String(new Date())}] Checking new connexions requests...`);
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
@@ -63,7 +67,7 @@ const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
 
 const getConversation = async (
   client: Client,
-  telegram: Telegram,
+  telegram: typeof Telegram,
   conversationId: string
 ) => {
   const messagesScroller = client.message.getMessages({ conversationId });
@@ -83,39 +87,40 @@ const getConversation = async (
     }
 
     wait(3);
-    const conversationAsRead = await client.conversation.markConversationAsRead(
-      {
-        conversationId,
-      }
-    );
 
-    if (conversationAsRead.read) {
-      const action = formatActionMessage(text.toLowerCase());
-      const answer = checkAction(action);
-      if (answer) {
-        TELEGRAM_ID &&
-          telegram.sendMessage(
-            TELEGRAM_ID,
-            `Command [${action}] asked by ${firstName} ${lastName}`
-          );
-        if (TELEGRAM_ID && action === "contact")
-          telegram.sendMessage(
-            TELEGRAM_ID,
-            `🚨 ${firstName} ${lastName} wants to talk to you`,
-            false
-          );
-        wait(2);
-        profileId !== LINKEDIN_ID &&
-          (await client.message.sendMessage({
-            profileId,
-            text: answer,
-          }));
-      }
+    const action = formatActionMessage(text.toLowerCase());
+    const answer = checkAction(action);
+    if (answer) {
+      TELEGRAM_ID &&
+        telegram.sendMessage(
+          TELEGRAM_ID,
+          `Command [${action}] asked by ${firstName} ${lastName}`
+        );
+      if (TELEGRAM_ID && action === "contact")
+        telegram.sendMessage(
+          TELEGRAM_ID,
+          `🚨 ${firstName} ${lastName} wants to talk to you`,
+          false
+        );
+      wait(2);
+      profileId !== LINKEDIN_ID &&
+        (await client.message.sendMessage({
+          profileId,
+          text: answer,
+        }));
+      INTERVAL = shortInterval;
     }
+
+    await client.conversation.markConversationAsRead({
+      conversationId,
+    });
   }
 };
 
-const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
+const checkUnreadMessages = async (
+  client: Client,
+  telegram: typeof Telegram
+) => {
   console.log(`[${String(new Date())}] Checking unread messages...`);
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();

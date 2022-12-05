@@ -32,5 +32,4 @@
 ## Notes
 
 - This bot uses the [Linkedin-private-api](https://github.com/eilonmore/linkedin-private-api) with uses Linkedin Voyager API.
-- Tested on macOS.
 - Also available on [Dockerhub](https://hub.docker.com/repository/docker/busshi/linkedin_bot_api)
