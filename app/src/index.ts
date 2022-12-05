@@ -110,6 +110,7 @@ const getConversation = async (
             profileId,
             text: answer,
           }));
+        INTERVAL = shortInterval;
       }
     }
   }
