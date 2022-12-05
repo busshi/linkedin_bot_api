@@ -22,7 +22,7 @@ This bot is the following of [the first one](https://github.com/busshi/linkedin_
 ## Usage
 
 - Copy env.sample to a .env file a replace with your custom values
-- Install dependencies `cd app && yarn install && cd linkedin-private-api && yarn install`
+- Install dependencies `cd app && yarn install`
 - Run the bot in development mode `cd app && yarn run dev`
 - Build the bot and transpile into Javascript `cd app && tsc`
 - Run the built bot ready to be deployed: `node app/dist/index.js`
