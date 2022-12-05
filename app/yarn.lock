@@ -2,12 +2,23 @@
 # yarn lockfile v1
 
 
-"@busshi/npm-telegram-api@^1.0.0":
+"@busshi/linkedin-private-api@^1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@busshi/npm-telegram-api/-/npm-telegram-api-1.0.0.tgz#63b3a9de0e02d2953c0b1d4ab3677c6e3d58ff7d"
-  integrity sha512-o48AsHqqiw+aco1GTO4Dlto4D42R9jP+2Qrv5Yr9Y/8in3CvbX7DNC9Iabd5uhCfaQjp/4hf8BfYrvCRWpzD0A==
+  resolved "https://registry.yarnpkg.com/@busshi/linkedin-private-api/-/linkedin-private-api-1.0.0.tgz#4833038f114f0c954c30b782b1b6dfc0cc8f23c8"
+  integrity sha512-PstBVAUwtvUFO5BAmc0oYH2fsJzNme6SzDNCMg2RxyXFLtgAWIRh7Qhwqx5mStdRQVC/TsFd5T+KqvQsVn4Glg==
   dependencies:
-    "@types/node" "^18.11.10"
+    axios "^0.21.0"
+    cookie "^0.5.0"
+    fs "^0.0.1-security"
+    lodash "^4.17.15"
+    querystring "^0.2.0"
+    url "^0.11.0"
+
+"@busshi/telegram-api@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@busshi/telegram-api/-/telegram-api-1.0.3.tgz#34c20c56f0ee22b94f99c20c35ccda97497274e9"
+  integrity sha512-oQv32mm/WP5wO4tAHt6jUthjEU8FpDoAAFZXUpYVWNuKE0YqvfT7SrbVKPysrp6aWSus8JES+h/4KJCBd8MjTg==
+  dependencies:
     axios "^1.2.0"
 
 "@cspotcode/source-map-support@^0.8.0":
@@ -141,16 +152,6 @@ fs@^0.0.1-security:
   version "0.0.1-security"
   resolved "https://registry.yarnpkg.com/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
   integrity sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==
-
-"linkedin-private-api@file:./linkedin-private-api":
-  version "1.1.2"
-  dependencies:
-    axios "^0.21.0"
-    cookie "^0.5.0"
-    fs "^0.0.1-security"
-    lodash "^4.17.15"
-    querystring "^0.2.0"
-    url "^0.11.0"
 
 lodash@^4.17.15:
   version "4.17.21"
