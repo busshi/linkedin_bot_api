@@ -13,7 +13,7 @@ En attendant de me parler directement, vous pouvez demander à mon bot (expérim
 - dispo : pour connaître mes disponibilités,
 - contact : pour communiquer directement avec moi,
 
-Pour information, ce bot tourne sur mon raspberry (uniquement la journée) et il manque parfois de ressources pour vous répondre ! Un peu de patience...
+Pour information, ce bot tourne sur mon raspberry et il manque parfois de ressources pour vous répondre ! Un peu de patience... En service uniquement la journée... Le soir, je pourrais sûrement vous répondre en personne. 
 
 A très vite.
 
