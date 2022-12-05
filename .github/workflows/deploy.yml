@@ -6,35 +6,35 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Clone app from master branch
-        uses: actions/checkout@v2
+  # build:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Clone app from master branch
+  #       uses: actions/checkout@v2
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v1
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_LOGIN }}
-          password: ${{ secrets.DOCKERHUB_API_KEY }}
+  #     - name: Login to DockerHub
+  #       uses: docker/login-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_LOGIN }}
+  #         password: ${{ secrets.DOCKERHUB_API_KEY }}
 
-      - name: Build Bot and push images
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          tags: busshi/linkedin_bot_api:latest
-          platforms: |-
-            linux/arm64
-            linux/amd64
-          push: true
-          cache-from: type=gha
-          cache-to: type=gha
+  #     - name: Build Bot and push images
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: .
+  #         tags: busshi/linkedin_bot_api:latest
+  #         platforms: |-
+  #           linux/arm64
+  #           linux/amd64
+  #         push: true
+  #         cache-from: type=gha
+  #         cache-to: type=gha
 
   deploy:
     runs-on: ubuntu-20.04
@@ -63,4 +63,4 @@ jobs:
         run: |
           ssh deploy 'cd $HOME/linkedin_bot_api && git stash && git pull && docker-compose up --build -d'
 
-    needs: build
+#    needs: build
