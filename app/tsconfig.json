@@ -9,5 +9,5 @@
     "outDir": "dist",
     "rootDir": "src/"
   },
-  "exclude": ["node_modules", "linkedin-private-api"]
+  "exclude": ["node_modules"]
 }

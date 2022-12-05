@@ -22,7 +22,8 @@
   "dependencies": {
     "@busshi/linkedin-private-api": "^1.0.0",
     "@busshi/telegram-api": "^1.0.3",
-    "axios": "^1.2.0"
+    "axios": "^1.2.0",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/node": "^18.11.10",

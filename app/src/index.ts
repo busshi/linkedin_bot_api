@@ -1,9 +1,11 @@
 import { shortInterval, longInterval, welcomeMessage } from "./constants";
-
+import * as dotenv from "dotenv";
 import { Client } from "@busshi/linkedin-private-api";
 import { checkAction, formatActionMessage, wait } from "./utils";
 
 const Telegram = require("@busshi/telegram-api");
+
+dotenv.config();
 
 const { LINKEDIN_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_ID, USERNAME, PASSWORD } =
   process.env;
