@@ -34,4 +34,4 @@ This bot is the following of [the first one](https://github.com/busshi/linkedin_
 ## Notes
 
 - This bot uses the [Linkedin-private-api](https://github.com/eilonmore/linkedin-private-api) with uses Linkedin Voyager API.
-- Also available on [Dockerhub](https://hub.docker.com/repository/docker/busshi/linkedin_bot_api)
+- Also available on [Dockerhub](https://hub.docker.com/busshi/linkedin_bot_api)
