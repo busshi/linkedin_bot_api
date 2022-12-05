@@ -16,7 +16,9 @@ const checkReceivedInvitations = async (
   client: Client,
   telegram: typeof Telegram
 ) => {
-  console.log(`[${String(new Date())}] Checking new connexions requests...`);
+  const d = new Date();
+  const date = d.toLocaleString();
+  console.log(`[${date}] Checking new connexions requests...`);
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
 
@@ -123,7 +125,9 @@ const checkUnreadMessages = async (
   client: Client,
   telegram: typeof Telegram
 ) => {
-  console.log(`[${String(new Date())}] Checking unread messages...`);
+  const d = new Date();
+  const date = d.toLocaleString();
+  console.log(`[${date}] Checking unread messages...`);
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();
   for (const conv of conversations) {
