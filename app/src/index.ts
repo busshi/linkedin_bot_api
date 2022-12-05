@@ -10,7 +10,7 @@ const { LINKEDIN_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_ID, USERNAME, PASSWORD } =
 let INTERVAL = longInterval;
 
 const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
-  console.log("[+] Checking new connexions requests...");
+  console.log(`[${String(new Date())}] Checking new connexions requests...`);
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
 
@@ -116,7 +116,7 @@ const getConversation = async (
 };
 
 const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
-  console.log("[+] Checking unread messages...");
+  console.log(`[${String(new Date())}] Checking unread messages...`);
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();
   for (const conv of conversations) {
