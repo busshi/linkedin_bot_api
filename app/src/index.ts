@@ -83,36 +83,33 @@ const getConversation = async (
     }
 
     wait(3);
-    const conversationAsRead = await client.conversation.markConversationAsRead(
-      {
-        conversationId,
-      }
-    );
 
-    if (conversationAsRead.read) {
-      const action = formatActionMessage(text.toLowerCase());
-      const answer = checkAction(action);
-      if (answer) {
-        TELEGRAM_ID &&
-          telegram.sendMessage(
-            TELEGRAM_ID,
-            `Command [${action}] asked by ${firstName} ${lastName}`
-          );
-        if (TELEGRAM_ID && action === "contact")
-          telegram.sendMessage(
-            TELEGRAM_ID,
-            `🚨 ${firstName} ${lastName} wants to talk to you`,
-            false
-          );
-        wait(2);
-        profileId !== LINKEDIN_ID &&
-          (await client.message.sendMessage({
-            profileId,
-            text: answer,
-          }));
-        INTERVAL = shortInterval;
-      }
+    const action = formatActionMessage(text.toLowerCase());
+    const answer = checkAction(action);
+    if (answer) {
+      TELEGRAM_ID &&
+        telegram.sendMessage(
+          TELEGRAM_ID,
+          `Command [${action}] asked by ${firstName} ${lastName}`
+        );
+      if (TELEGRAM_ID && action === "contact")
+        telegram.sendMessage(
+          TELEGRAM_ID,
+          `🚨 ${firstName} ${lastName} wants to talk to you`,
+          false
+        );
+      wait(2);
+      profileId !== LINKEDIN_ID &&
+        (await client.message.sendMessage({
+          profileId,
+          text: answer,
+        }));
+      INTERVAL = shortInterval;
     }
+
+    await client.conversation.markConversationAsRead({
+      conversationId,
+    });
   }
 };
 
