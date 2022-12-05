@@ -12,7 +12,6 @@ En attendant de me parler directement, vous pouvez demander à mon bot quelques 
 - techno : pour connaître mes technologies préférées,
 - dispo : pour connaître mes disponibilités,
 - contact : pour communiquer directement avec moi et désactiver le bot,
-- unmute : pour réactiver le bot après une demande de contact.
 
 Pour information, ce bot tourne sur mon raspberry et il manque parfois de ressources pour vous répondre ! Un peu de patience...
 
@@ -29,7 +28,7 @@ export const actions = {
   profile:
     "Je suis plutôt cool mais déterminé. J'aime ce que je fais et je suis épanoui dans mon travail ce qui me permet d'être plus productif.\n\nAutodidacte, je me forme en permanence pour rester à la pointe des dernières technologies.\nJe travaille essentiellement dans le web en tant que développeur fullstack mais je m'adapte très facilement.\n😎\n\nJetez un oeil à mon profil sur Malt : https://www.malt.fr/profile/alexandredubar",
   contact:
-    "J'ai transmis votre demande de communiquer avec mon créateur. Il vous répondra en personne dès que possible...\nJe resterai muet en attendant... 🫢\n\nUnmute pour me réactiver",
-  unmute:
-    "👋\n\nRappel des commandes disponibles :\n\n- profile : pour en savoir un peu plus sur moi,\n- techno : pour connaître mes technologies préférées,\n- dispo : pour connaître mes disponibilités,\n- contact : pour communiquer directement avec moi et désactiver le bot,\n- unmute : pour réactiver le bot après une demande de contact.",
+    "J'ai transmis votre demande de communiquer avec mon créateur. Il vous répondra en personne dès que possible...", //\nJe resterai muet en attendant... 🫢\n\nUnmute pour me réactiver",
+  //   unmute:
+  //     "👋\n\nRappel des commandes disponibles :\n\n- profile : pour en savoir un peu plus sur moi,\n- techno : pour connaître mes technologies préférées,\n- dispo : pour connaître mes disponibilités,\n- contact : pour communiquer directement avec moi et désactiver le bot,\n- unmute : pour réactiver le bot après une demande de contact.",
 };
