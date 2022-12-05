@@ -1,14 +1,10 @@
 import dotenv from "dotenv";
-import {
-  shortInterval,
-  longInterval,
-  welcomeMessage,
-  colors,
-} from "./constants";
+import { shortInterval, longInterval, welcomeMessage } from "./constants";
 
 dotenv.config();
 
 import { Client } from "linkedin-private-api";
+import { wait } from "./utils";
 
 const { GITHUB_URL, CV_URL, USERNAME, PASSWORD } = process.env;
 let INTERVAL = longInterval; // seconds
@@ -106,9 +102,7 @@ let INTERVAL = longInterval; // seconds
 // };
 
 const checkReceivedInvitations = async (client: Client) => {
-  console.log(
-    `${colors.orange}[+] Checking new connexions requests...${colors.clear}`
-  );
+  console.log("[+] Checking new connexions requests...");
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
 
@@ -117,41 +111,42 @@ const checkReceivedInvitations = async (client: Client) => {
     const { firstName, lastName, pictureUrls, profileId } = profile;
     const invitationId = entityUrn.split(":")[3];
     const fromUser = `${firstName} ${lastName}`;
-    if (pictureUrls && pictureUrls.length) {
-      const fromUserPic = pictureUrls[0];
-    }
     //TODO
     // Telegram notif
     const message = `✋ New connection request from ${fromUser}`;
+    console.log(message);
+    if (pictureUrls && pictureUrls.length) {
+      const fromUserPic = pictureUrls[0];
+      console.log(fromUserPic);
+    }
     // sendMessage
     // sendPhoto
-    // try {
-    //   await client.invitation.replyInvitation({
-    //     invitationId,
-    //     invitationSharedSecret: sharedSecret,
-    //   });
-    console.log(
-      `${colors.orange}[+] Sending welcome message to ${firstName} ${lastName}${colors.clear}`
-    );
-    //   await client.message.sendMessage({
-    //     profileId,
-    //     text: "👋",
-    //   });
+    try {
+      await client.invitation.replyInvitation({
+        invitationId,
+        invitationSharedSecret: sharedSecret,
+      });
+      console.log(`Sending welcome message to ${firstName} ${lastName}`);
+      await client.message.sendMessage({
+        profileId,
+        text: "👋",
+      });
 
-    //   wait(2);
+      wait(2);
 
-    //   await client.message.sendMessage({
-    //     profileId,
-    //     text: welcomeMessage(firstName),
-    //   });
-    //    INTERVAL = shortInterval
-    //
-    // . TO DO
-    //  Notification Telegram
-    // const msg = `📤 Welcome message sent to [${firstName lastName}]`
-    // } catch {
-    //   console.error("Error while accepting connection request");
-    // }
+      await client.message.sendMessage({
+        profileId,
+        text: welcomeMessage(firstName),
+      });
+      INTERVAL = shortInterval;
+
+      // . TO DO
+      //  Notification Telegram
+      const msg = `📤 Welcome message sent to ${firstName} ${lastName}`;
+      console.log(msg);
+    } catch {
+      console.error("Error while accepting connection request");
+    }
     console.log("👥 Network checked");
   }
 };
@@ -172,19 +167,17 @@ const getConversation = async (client: Client, conversationId: string) => {
     //TO DO
     // Telegram notification
     console.log(profilePicture, firstName, lastName, profileId, text);
-    const message = `📥 New unread message from ${firstName} ${lastName}
-    ${text}
-    `;
+    const message = `📥 New unread message from ${firstName} ${lastName} ${text}`;
     console.log(message);
     //sendMessage
     //sendPhoto
 
-    // const conversationAsRead = await client.conversation.markConversationAsRead(
-    //   {
-    //     conversationId,
-    //   }
-    // );
-    // console.log("-> OK", conversationAsRead.read);
+    const conversationAsRead = await client.conversation.markConversationAsRead(
+      {
+        conversationId,
+      }
+    );
+    console.log("Conversation marked as seen: ", conversationAsRead.read);
 
     //TODO
     //check action
@@ -205,7 +198,7 @@ const getConversation = async (client: Client, conversationId: string) => {
 };
 
 const checkUnreadMessages = async (client: Client) => {
-  console.log(`${colors.orange}[+] Checking unread messages...${colors.clear}`);
+  console.log("[+] Checking unread messages...");
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();
   for (const conv of conversations) {
@@ -226,7 +219,7 @@ const checkUnreadMessages = async (client: Client) => {
 
   let i = 0;
   setInterval(() => {
-    //   !i && checkReceivedInvitations(client);
+    //  !i && checkReceivedInvitations(client);
     checkUnreadMessages(client);
     i += 1;
     if (i % 10 === 0) INTERVAL = longInterval;

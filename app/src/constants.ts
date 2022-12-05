@@ -1,13 +1,6 @@
 export const longInterval = 60;
 export const shortInterval = 10;
 
-export const colors = {
-  red: "\033[31m",
-  green: "\033[32m",
-  orange: "\033[33m",
-  clear: "\033[0m",
-};
-
 export const welcomeMessage = (firstName: string) => `
 Bonjour ${firstName},
 
