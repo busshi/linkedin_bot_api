@@ -1,6 +1,6 @@
 import { shortInterval, longInterval, welcomeMessage } from "./constants";
 
-import { Client } from "linkedin-private-api";
+import { Client } from "@busshi/linkedin-private-api";
 import { checkAction, formatActionMessage, wait } from "./utils";
 
 const Telegram = require("@busshi/telegram-api");
