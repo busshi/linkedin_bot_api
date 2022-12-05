@@ -2,14 +2,18 @@ import { shortInterval, longInterval, welcomeMessage } from "./constants";
 
 import { Client } from "linkedin-private-api";
 import { checkAction, formatActionMessage, wait } from "./utils";
-import { Telegram } from "./Telegram";
+
+const Telegram = require("@busshi/telegram-api");
 
 const { LINKEDIN_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_ID, USERNAME, PASSWORD } =
   process.env;
 
 let INTERVAL = longInterval;
 
-const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
+const checkReceivedInvitations = async (
+  client: Client,
+  telegram: typeof Telegram
+) => {
   console.log(`[${String(new Date())}] Checking new connexions requests...`);
   const receivedScroller = client.invitation.getReceivedInvitations();
   const receivedInvitations = await receivedScroller.scrollNext();
@@ -63,7 +67,7 @@ const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
 
 const getConversation = async (
   client: Client,
-  telegram: Telegram,
+  telegram: typeof Telegram,
   conversationId: string
 ) => {
   const messagesScroller = client.message.getMessages({ conversationId });
@@ -113,7 +117,10 @@ const getConversation = async (
   }
 };
 
-const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
+const checkUnreadMessages = async (
+  client: Client,
+  telegram: typeof Telegram
+) => {
   console.log(`[${String(new Date())}] Checking unread messages...`);
   const conversationsScroller = client.conversation.getConversations();
   const conversations = await conversationsScroller.scrollNext();
