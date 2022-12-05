@@ -2,9 +2,9 @@ version: "3.9"
 
 services:
   linkedin-bot-api:
-    #build: .
-    image: busshi/linkedin_bot_api:latest
-    pull_policy: always
+    build: .
+    #image: busshi/linkedin_bot_api:latest
+    #pull_policy: always
 
     container_name: linkedin_bot_api
 
@@ -13,4 +13,4 @@ services:
 
     entrypoint: yarn run prod
 
-    restart: on-failure:5
+    restart: on-failure:1
