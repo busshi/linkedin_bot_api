@@ -1,5 +1,5 @@
-export const longInterval = 60; // seconds
-export const shortInterval = 10;
+export const longInterval = 600; // seconds
+export const shortInterval = 60;
 
 export const welcomeMessage = (firstName: string) => `
 Bonjour ${firstName},
