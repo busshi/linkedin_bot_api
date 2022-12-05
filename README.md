@@ -4,7 +4,7 @@
 
 ### A basic linkedin bot used to accept incoming connexions requests coded in Typescript.
 
-This bot is the following of [the first one](https://github.com/busshi/linkedin_api_bot) which used Selenium but for some reasons, I decided to create another one using the API to avoid my raspberry to suffer!
+This bot is the following of [the first one](https://github.com/busshi/linkedin_bot_api) which used Selenium but for some reasons, I decided to create another one using the API to avoid my raspberry to suffer!
 
 ## Functionalities:
 
