@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import { Client } from "@busshi/linkedin-private-api";
 import { checkAction, formatActionMessage, wait } from "./utils";
 
-const Telegram = require("@busshi/telegram-api");
+import Telegram from "@busshi/telegram-api";
 
 dotenv.config();
 
@@ -12,10 +12,7 @@ const { LINKEDIN_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_ID, USERNAME, PASSWORD } =
 
 let INTERVAL = longInterval;
 
-const checkReceivedInvitations = async (
-  client: Client,
-  telegram: typeof Telegram
-) => {
+const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
   const d = new Date();
   const date = d.toLocaleString();
   console.log(`[${date}] Checking new connexions requests...`);
@@ -71,7 +68,7 @@ const checkReceivedInvitations = async (
 
 const getConversation = async (
   client: Client,
-  telegram: typeof Telegram,
+  telegram: Telegram,
   conversationId: string
 ) => {
   const messagesScroller = client.message.getMessages({ conversationId });
@@ -121,10 +118,7 @@ const getConversation = async (
   }
 };
 
-const checkUnreadMessages = async (
-  client: Client,
-  telegram: typeof Telegram
-) => {
+const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
   const d = new Date();
   const date = d.toLocaleString();
   console.log(`[${date}] Checking unread messages...`);

@@ -14,10 +14,10 @@
     querystring "^0.2.0"
     url "^0.11.0"
 
-"@busshi/telegram-api@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@busshi/telegram-api/-/telegram-api-1.0.3.tgz#34c20c56f0ee22b94f99c20c35ccda97497274e9"
-  integrity sha512-oQv32mm/WP5wO4tAHt6jUthjEU8FpDoAAFZXUpYVWNuKE0YqvfT7SrbVKPysrp6aWSus8JES+h/4KJCBd8MjTg==
+"@busshi/telegram-api@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@busshi/telegram-api/-/telegram-api-2.0.2.tgz#52700de8384f0c462af3e0b1aa91a7175e854091"
+  integrity sha512-QYf8teico345awohiUwseL2b737gM9+lshuIYOCKfcR7A5EAhBIb1jltHSp0BACBxxowJM29Y4dfxpa3o+bOQw==
   dependencies:
     axios "^1.2.0"
 
