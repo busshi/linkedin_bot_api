@@ -1,4 +1,4 @@
-import { shortInterval, longInterval, welcomeMessage } from "./constants";
+import { shortInterval, longInterval, newWelcomeMessage } from "./constants";
 import * as dotenv from "dotenv";
 import { Client } from "@busshi/linkedin-private-api";
 import { checkAction, formatActionMessage, wait } from "./utils";
@@ -52,7 +52,7 @@ const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
 
       await client.message.sendMessage({
         profileId,
-        text: welcomeMessage(firstName),
+        text: newWelcomeMessage(firstName),
       });
       INTERVAL = shortInterval;
 
@@ -140,12 +140,13 @@ const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
   const telegram = new Telegram(TELEGRAM_BOT_TOKEN || "");
   if (TELEGRAM_ID) telegram.sendMessage(TELEGRAM_ID, "✅ Starting bot...");
 
-  let i = 0;
-  setInterval(() => {
-    !i && checkReceivedInvitations(client, telegram);
-    checkUnreadMessages(client, telegram);
-    i += 1;
-    if (i % 10 === 0) INTERVAL = longInterval;
-    if (i === 60) i = 0;
-  }, INTERVAL * 1000);
+  checkReceivedInvitations(client, telegram);
+  // let i = 0;
+  // setInterval(() => {
+  //   !i && checkReceivedInvitations(client, telegram);
+  //   checkUnreadMessages(client, telegram);
+  //   i += 1;
+  //   if (i % 10 === 0) INTERVAL = longInterval;
+  //   if (i === 60) i = 0;
+  //  }, INTERVAL * 1000);
 })();
