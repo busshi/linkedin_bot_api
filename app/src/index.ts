@@ -62,8 +62,9 @@ const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
     } catch {
       console.error("Error while accepting connection request");
     }
-    console.log("👥 Network checked");
+    wait(2);
   }
+  console.log("👥 Network checked");
 };
 
 const getConversation = async (
@@ -138,9 +139,11 @@ const checkUnreadMessages = async (client: Client, telegram: Telegram) => {
   await client.login.userPass({ username: USERNAME || "", password: PASSWORD });
 
   const telegram = new Telegram(TELEGRAM_BOT_TOKEN || "");
-  if (TELEGRAM_ID) telegram.sendMessage(TELEGRAM_ID, "✅ Starting bot...");
+  TELEGRAM_ID && telegram.sendMessage(TELEGRAM_ID, "✅ Starting bot...");
 
   checkReceivedInvitations(client, telegram);
+
+  TELEGRAM_ID && telegram.sendMessage(TELEGRAM_ID, "❌ Stopping bot...");
   // let i = 0;
   // setInterval(() => {
   //   !i && checkReceivedInvitations(client, telegram);
