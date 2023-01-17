@@ -6,7 +6,7 @@ Bonjour ${firstName},
 
 Bienvenue dans mon réseau.
 
-Développeur passionné, je créé entre autres des sites web. Je t'invite à découvrir le mien. Si tu as le temps et l'envie, donne moi ton avis : https://busshidev.fr
+Développeur passionné, je crée entre autres des sites web. Je t'invite à découvrir le mien. Si tu as le temps et l'envie, donne moi ton avis : https://busshidev.fr
 
 Le code source est disponible sur mon github : https://github.com/busshi
 (Si tu aimes, une petite étoile ou un follow est toujours apprécié.) 😁
