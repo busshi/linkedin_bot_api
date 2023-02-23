@@ -21,10 +21,11 @@ const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
 
   for (const invit of receivedInvitations) {
     const { entityUrn, profile, sharedSecret } = invit;
-    const { firstName, lastName, pictureUrls, profileId } = profile;
+    const { firstName, lastName, pictureUrls, profileId, occupation } = profile;
+
     const invitationId = entityUrn.split(":")[3];
     const fromUser = `${firstName} ${lastName}`;
-    let message = `✋ New connection request from ${fromUser}`;
+    let message = `✋ New connection request from ${fromUser} - ${occupation}`;
 
     TELEGRAM_ID && telegram.sendMessage(TELEGRAM_ID, message);
     console.log(message);
@@ -41,21 +42,17 @@ const checkReceivedInvitations = async (client: Client, telegram: Telegram) => {
         invitationSharedSecret: sharedSecret,
       });
       wait(2);
-
       console.log(`Sending welcome message to ${firstName} ${lastName}`);
       await client.message.sendMessage({
         profileId,
         text: "👋",
       });
-
       wait(2);
-
       await client.message.sendMessage({
         profileId,
         text: newWelcomeMessage(firstName),
       });
       INTERVAL = shortInterval;
-
       message = `📤 Welcome message sent to ${firstName} ${lastName}`;
       console.log(message);
       TELEGRAM_ID && telegram.sendMessage(TELEGRAM_ID, message);
